@@ -12,6 +12,13 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Services\Addresses\DTOs\AddressDto.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EmployeeManagementSystem.Core\EmployeeManagementSystem.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Addresses\DTOs\" />
+    <Folder Include="Services\Skills\DTOS\" />
   </ItemGroup>
 </Project>
