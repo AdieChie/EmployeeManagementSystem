@@ -6,6 +6,7 @@ using EmployeeManagementSystem.Domain.Employees;
 using EmployeeManagementSystem.Domain.Skills;
 using EmployeeManagementSystem.Services.Employees.DTOs;
 using EmployeeManagementSystem.Services.Skills;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,9 +46,16 @@ namespace EmployeeManagementSystem.Services.Employees
             var employeeValidator = new EmployeeValidator();
             var address = ObjectMapper.Map<Address>(input.Address);
             address = await _addressManager.CreateAsync(address);
+
             var employee = ObjectMapper.Map<Employee>(input);
-            employeeValidator.Validate(employee);
             employee.Address = address;
+
+            var validationResult = employeeValidator.Validate(employee);
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+            
             employee = await _employeeManager.CreateAsync(employee);
             return ObjectMapper.Map<EmployeeDto>(employee);
         }

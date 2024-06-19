@@ -16,6 +16,5 @@ namespace EmployeeManagementSystem.Domain.Employees
         Task<List<Employee>> GetAllAsync();
         Task<Employee> GetAsync(string id);
         Task DeleteAsync(string id);
-        Task<List<Employee>> FilterByDateOfBirth(DateTime dateOfBirth);
     }
 }

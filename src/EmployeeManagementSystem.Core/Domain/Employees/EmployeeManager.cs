@@ -73,7 +73,6 @@ namespace EmployeeManagementSystem.Domain.Employees
                 // Delete the address
                 await _addressRepository.DeleteAsync(employee.Address);
 
-                // Save changes
                 await CurrentUnitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -81,12 +80,6 @@ namespace EmployeeManagementSystem.Domain.Employees
                 Logger.Error($"Error deleting employee with ID {id}: {ex.Message}", ex);
                 throw new UserFriendlyException($"An error occurred while deleting the employee with ID {id}.", ex);
             }
-        }
-
-
-        public Task<List<Employee>> FilterByDateOfBirth(DateTime dateOfBirth)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<List<Employee>> GetAllAsync()
@@ -110,10 +103,10 @@ namespace EmployeeManagementSystem.Domain.Employees
             {
                 var employee = await _employeeRepository.GetAllIncluding(e => e.Address, e => e.Skills)
                                                         .FirstOrDefaultAsync(e => e.Id == id);
+
                 if (employee == null)
-                {
                     throw new UserFriendlyException($"Employee with ID {id} not found.");
-                }
+
                 return employee;
             }
             catch (Exception ex)
@@ -125,9 +118,15 @@ namespace EmployeeManagementSystem.Domain.Employees
 
         public async Task<Employee> UpdateAsync(Employee input)
         {
-            var updatedEmployee = await _employeeRepository.UpdateAsync(input);
-            return ObjectMapper.Map<Employee>(updatedEmployee);
-
+            try
+            {
+                return await _employeeRepository.UpdateAsync(input);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error updating employee with ID {input.Id}: {ex.Message}", ex);
+                throw new UserFriendlyException($"An error occurred while updating the employee with ID {input.Id}.", ex);
+            }
         }
 
         private async Task<string> GenerateUniqueEmployeeIdAsync()

@@ -56,9 +56,8 @@ namespace EmployeeManagementSystem.Domain.Employees
         }
 
     
-            public static bool IsValidPhoneNumber(string number)
+            private bool IsValidPhoneNumber(string number)
             {
-                // South African phone number regex pattern
                 string pattern = @"^(?:\+27|0)[1-9]\d{8}$";
                 Regex regex = new Regex(pattern);
                 return regex.IsMatch(number);

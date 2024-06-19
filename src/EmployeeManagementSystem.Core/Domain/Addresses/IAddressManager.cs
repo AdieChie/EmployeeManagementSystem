@@ -11,8 +11,5 @@ namespace EmployeeManagementSystem.Domain.Addresses
     {
         Task<Address> CreateAsync(Address input);
         Task<Address> UpdateAsync(Address input);
-        Task<List<Address>> GetAllAsync();
-        Task<Address> GetAsync(string id);
-        Task DeleteAsync(string id);
     }
 }

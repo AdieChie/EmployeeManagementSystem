@@ -11,8 +11,5 @@ namespace EmployeeManagementSystem.Domain.Skills
     {
         Task<Skill> CreateAsync(Skill input);
         Task<Skill> UpdateAsync(Skill input);
-        Task<List<Skill>> GetAllAsync();
-        Task<Skill> GetAsync(string id);
-        Task DeleteAsync(string id);
     }
 }

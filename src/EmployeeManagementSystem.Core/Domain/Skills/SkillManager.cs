@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Repositories;
 using Abp.Domain.Services;
+using Abp.UI;
 using EmployeeManagementSystem.Domain.Employees;
 using System;
 using System.Collections.Generic;
@@ -20,28 +21,24 @@ namespace EmployeeManagementSystem.Domain.Skills
         }
         public async Task<Skill> CreateAsync(Skill input)
         {
-            await _skillRepository.InsertAsync(input);
-            await CurrentUnitOfWork.SaveChangesAsync();
-            return input;
+            try
+            {
+                await _skillRepository.InsertAsync(input);
+                await CurrentUnitOfWork.SaveChangesAsync();
+                return input;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error creating skill: {ex.Message}", ex);
+                throw new UserFriendlyException("An error occurred while creating the skill.", ex);
+            }
         }
 
-        public Task DeleteAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Skill>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Skill> GetAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<Skill> UpdateAsync(Skill input)
         {
+            try
+            {
                 var existingSkill = await _skillRepository.FirstOrDefaultAsync(s => s.Id == input.Id);
                 if (existingSkill != null)
                 {
@@ -55,8 +52,14 @@ namespace EmployeeManagementSystem.Domain.Skills
                     await _skillRepository.InsertAsync(input);
                 }
 
-            await CurrentUnitOfWork.SaveChangesAsync();
-            return input;
+                await CurrentUnitOfWork.SaveChangesAsync();
+                return input;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error updating or creating skill with ID {input.Id}: {ex.Message}", ex);
+                throw new UserFriendlyException($"An error occurred while updating or creating the skill with ID {input.Id}.", ex);
+            }
         }
     }
 }
