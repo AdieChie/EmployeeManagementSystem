@@ -21,7 +21,7 @@ namespace EmployeeManagementSystem.Domain.Employees
 
             RuleFor(x => x).Custom((entity, context) => {
 
-                if (ValidateEmail(entity.EmailAddress))
+                if (!ValidateEmail(entity.EmailAddress))
                 {
                     context.AddFailure("Email address is not valid");
                 }
